@@ -1,0 +1,43 @@
+---
+home: true
+heroImage: https://file.bbs-go.com/bbs-go.com/logo_364x200.png
+actionText: 快速上手 →
+actionLink: /guide/
+features:
+- title: 简洁至上
+  details: BBS-GO 包含一个论坛的必要功能，简约而不简单，同时页面浏览有非常快速的响应。
+- title: 响应式布局
+  details: 支持在不同的屏幕尺寸下面展示，例如桌面平台、iPad、iPhone，这有助于你的网站内容往各类移动平台推广。
+- title: Go语言驱动
+  details: 基于Go语言开发，高性能、易扩展。
+footer: Copyright © 2020
+---
+
+![bbs-go功能简介](https://file.bbs-go.com/images/2021/11/12/8754103189670afe659f88d5596c8f2a.png)
+
+## 官网
+
+- 交流/演示站：[TAP社区](http://sns.bbs-go.com)
+
+
+## 技术栈
+
+- gin ([https://github.com/gin/gin](https://github.com/gin/gin)) Go语言 mvc 框架
+- gorm ([http://gorm.io/](http://gorm.io/)) 最好用的Go语言数据库orm框架
+- nuxt.js ([https://nuxtjs.org](https://nuxtjs.org)) 基于Vue的服务端渲染框架，效率高到爆
+- element-UI ([https://element.eleme.cn](https://element.eleme.cn)) 饿了么开源的基于 vue.js 的前端库
+- vditor ([https://github.com/b3log/vditor](https://github.com/b3log/vditor)) Markdown 编辑器
+- resty ([https://github.com/go-resty/resty](https://github.com/go-resty/resty)) Go语言好用的 http-client
+- cron ([https://github.com/robfig/cron](https://github.com/robfig/cron)) 定时任务框架
+- goquery ([https://github.com/PuerkitoBio/goquery](https://github.com/PuerkitoBio/goquery)) html dom 元素解析
+
+## 公众号
+
+> 关注公众号`TAP社区`获取更多干货资源。
+
+![TAP社区](https://open.weixin.qq.com/qr/code?username=gh_950827012b8d)
+
+## 问题反馈
+
+- 问题反馈：[http://sns.bbs-go.com/topic/create?nodeId=6](http://sns.bbs-go.com/topic/create?nodeId=6)
+- 功能建议：[http://sns.bbs-go.com/topic/609](http://sns.bbs-go.com/topic/609)

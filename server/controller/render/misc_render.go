@@ -1,0 +1,78 @@
+package render
+
+import (
+	"bbs-go/util/urls"
+	"strings"
+
+	"github.com/microcosm-cc/bluemonday"
+
+	"bbs-go/util/simple"
+
+	"github.com/PuerkitoBio/goquery"
+
+	"bbs-go/service"
+)
+
+func xssProtection(htmlContent string) string {
+	ugcProtection := bluemonday.UGCPolicy() // 用户生成内容模式
+	ugcProtection.AllowAttrs("class").OnElements("code")
+	return ugcProtection.Sanitize(htmlContent)
+}
+
+// handleHtmlContent 处理html内容
+func handleHtmlContent(htmlContent string) string {
+	htmlContent = xssProtection(htmlContent)
+	doc, err := goquery.NewDocumentFromReader(strings.NewReader(htmlContent))
+	if err != nil {
+		return htmlContent
+	}
+
+	doc.Find("a").Each(func(i int, selection *goquery.Selection) {
+		href := selection.AttrOr("href", "")
+
+		if simple.IsBlank(href) {
+			return
+		}
+
+		// 不是内部链接
+		if !urls.IsInternalUrl(href) {
+			selection.SetAttr("target", "_blank")
+			selection.SetAttr("rel", "external nofollow") // 标记站外链接，搜索引擎爬虫不传递权重值
+
+			_config := service.SysConfigService.GetConfig()
+			if _config.UrlRedirect { // 开启非内部链接跳转
+				newHref := simple.ParseUrl(urls.AbsUrl("/redirect")).AddQuery("url", href).BuildStr()
+				selection.SetAttr("href", newHref)
+			}
+		}
+
+		// 如果a标签没有title，那么设置title
+		title := selection.AttrOr("title", "")
+		if len(title) == 0 {
+			selection.SetAttr("title", selection.Text())
+		}
+	})
+
+	// 处理图片
+	doc.Find("img").Each(func(i int, selection *goquery.Selection) {
+		src := selection.AttrOr("src", "")
+
+		// 处理第三方图片
+		if strings.Contains(src, "qpic.cn") {
+			src = simple.ParseUrl("/api/img/proxy").AddQuery("url", src).BuildStr()
+			// selection.SetAttr("src", src)
+		}
+
+		// 处理图片样式
+		src = HandleOssImageStyleDetail(src)
+
+		// 处理lazyload
+		selection.SetAttr("data-src", src)
+		selection.RemoveAttr("src")
+	})
+
+	if htmlStr, err := doc.Find("body").Html(); err == nil {
+		return htmlStr
+	}
+	return htmlContent
+}
